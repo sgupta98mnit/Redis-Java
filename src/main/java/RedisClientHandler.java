@@ -30,7 +30,9 @@ public class RedisClientHandler implements Runnable {
                 var out = clientSocket.getOutputStream();
         ) {
             String[] args = RespParser.parse(reader);
-            commandRegistry.getCommand(args[0]).execute(args);
+            String commandResponse = commandRegistry.getCommand(args[0]).execute(args);
+            out.write(commandResponse.getBytes());
+            out.flush();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
