@@ -20,32 +20,18 @@ public class Main {
         int port = 6379;
         try {
             serverSocket = new ServerSocket(port);
+
             // Since the tester restarts your program quite often, setting SO_REUSEADDR
             // ensures that we don't run into 'Address already in use' errors
             serverSocket.setReuseAddress(true);
             // Wait for connection from client.
-            clientSocket = serverSocket.accept();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            var out = clientSocket.getOutputStream();
-            String inputLine;
-            while( (inputLine = reader.readLine()) != null) {
-                System.out.println("received input: " + inputLine);
-
-                if(StringUtils.equalsIgnoreCase(inputLine, "PING")) {
-                    out.write("+PONG\r\n".getBytes());
-                    out.flush();
-                }
+            while(true) {
+                clientSocket = serverSocket.accept();
+                System.out.println("Client connected: " + clientSocket.getRemoteSocketAddress());
+                new Thread(new RedisClientHandler(clientSocket)).start();
             }
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
-        } finally {
-          try {
-            if (clientSocket != null) {
-              clientSocket.close();
-            }
-          } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
-          }
         }
   }
 }
