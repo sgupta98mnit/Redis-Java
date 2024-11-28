@@ -18,6 +18,7 @@ public class RedisClientHandler implements Runnable {
 
     private final Socket clientSocket;
     private final CommandRegistry commandRegistry = new CommandRegistry();
+    private final int THREAD_SLEEP_TIME = 100;
 
     public RedisClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -29,8 +30,14 @@ public class RedisClientHandler implements Runnable {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 var out = clientSocket.getOutputStream();
         ) {
-            // Loop to handle multiple commands from one client.
+//            Loop to handle multiple commands from one client.
+//            This loop will continue to run even when there is no input stream,
+//            so handling thread sleep condition in loop.
             while(!clientSocket.isClosed()) {
+                //If input stream empty, send thread to sleep
+                if(!reader.ready()) {
+                    Thread.sleep(THREAD_SLEEP_TIME);
+                }
                 String[] args;
                 try {
                     args = RespParser.parse(reader);
@@ -46,6 +53,8 @@ public class RedisClientHandler implements Runnable {
             System.out.println(e.getMessage());
             e.printStackTrace();
 
+        } catch(InterruptedException e) {
+            System.out.println("Interrupted exception: " + e.getMessage());
         } finally {
             try {
                 if(clientSocket != null) {
