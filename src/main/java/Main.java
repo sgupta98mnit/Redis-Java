@@ -25,15 +25,20 @@ public class Main {
             serverSocket.setReuseAddress(true);
             // Wait for connection from client.
             clientSocket = serverSocket.accept();
-            InputStream inputStream = clientSocket.getInputStream();
-            String result = new BufferedReader(new InputStreamReader(inputStream))
-                    .lines().collect(Collectors.joining("\n"));
-            String[] commmands = StringUtils.split(result, "\n");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            var out = clientSocket.getOutputStream();
+            String inputLine;
+            while( (inputLine = reader.readLine()) != null) {
+                System.out.println("received input: " + inputLine);
 
-            for(String command : commmands) {
-                clientSocket.getOutputStream().write("+PONG\r\n".getBytes());
+                if(StringUtils.equals(inputLine, "PING")) {
+                    out.write("+PONG\r\n".getBytes());
+                    out.flush();
+                } else {
+                    out.write("-ERR\r\n".getBytes());
+                    out.flush();
+                }
             }
-
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
