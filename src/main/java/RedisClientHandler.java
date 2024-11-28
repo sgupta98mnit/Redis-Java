@@ -1,3 +1,4 @@
+import command.CommandRegistry;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.net.Socket;
 public class RedisClientHandler implements Runnable {
 
     private final Socket clientSocket;
+    private final CommandRegistry commandRegistry = new CommandRegistry();
 
     public RedisClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -30,10 +32,11 @@ public class RedisClientHandler implements Runnable {
             while ((inputLine = reader.readLine()) != null) {
                 System.out.println("received input: " + inputLine);
 
-                if (StringUtils.equalsIgnoreCase(inputLine, "PING")) {
-                    out.write("+PONG\r\n".getBytes());
-                    out.flush();
-                }
+                String[] tokens = StringUtils.split(inputLine, " ");
+                String command = tokens[0];
+                String responseString = commandRegistry.getCommand(command).execute(tokens);
+                out.write(responseString.getBytes());
+                out.flush();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
