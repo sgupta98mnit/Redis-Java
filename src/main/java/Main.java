@@ -30,8 +30,14 @@ public class Main {
             String inputLine;
             while( (inputLine = reader.readLine()) != null) {
                 System.out.println("received input: " + inputLine);
-                out.write("+PONG\r\n".getBytes());
-                out.flush();
+
+                if(StringUtils.equalsIgnoreCase(inputLine, "PING")) {
+                    out.write("+PONG\r\n".getBytes());
+                    out.flush();
+                } else {
+                    out.write("-ERR\r\n".getBytes());
+                    out.flush();
+                }
             }
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
