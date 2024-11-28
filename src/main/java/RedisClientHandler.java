@@ -29,10 +29,19 @@ public class RedisClientHandler implements Runnable {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 var out = clientSocket.getOutputStream();
         ) {
-            String[] args = RespParser.parse(reader);
-            String commandResponse = commandRegistry.getCommand(args[0]).execute(args);
-            out.write(commandResponse.getBytes());
-            out.flush();
+            // Loop to handle multiple commands from one client.
+            while(!clientSocket.isClosed()) {
+                String[] args;
+                try {
+                    args = RespParser.parse(reader);
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e.getMessage());
+                    break;
+                }
+                String commandResponse = commandRegistry.getCommand(args[0]).execute(args);
+                out.write(commandResponse.getBytes());
+                out.flush();
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
