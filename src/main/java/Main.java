@@ -31,7 +31,7 @@ public class Main {
             while( (inputLine = reader.readLine()) != null) {
                 System.out.println("received input: " + inputLine);
 
-                if(StringUtils.equals(inputLine, "PING")) {
+                if(StringUtils.equalsIgnoreCase(inputLine, "PING")) {
                     out.write("+PONG\r\n".getBytes());
                     out.flush();
                 } else {
