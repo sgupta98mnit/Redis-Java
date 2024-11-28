@@ -12,10 +12,13 @@ import java.net.Socket;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class RedisClientHandler implements Runnable {
 
     private final Socket clientSocket;
+
+    public RedisClientHandler(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
 
     @Override
     public void run() {
