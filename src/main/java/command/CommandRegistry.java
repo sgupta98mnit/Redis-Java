@@ -18,4 +18,5 @@ public class CommandRegistry {
     public Command getCommand(String command) {
         return commands.getOrDefault(StringUtils.upperCase(command), args -> "Unknown command\r\n");
     }
+
 }
