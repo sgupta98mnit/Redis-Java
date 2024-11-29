@@ -11,6 +11,8 @@ public class CommandRegistry {
     public CommandRegistry() {
         commands.put("PING", args -> "+PONG\r\n");
         commands.put("ECHO", new EchoCommand());
+        commands.put("SET", new SetCommand());
+        commands.put("GET", new GetCommand());
     }
 
     public Command getCommand(String command) {
