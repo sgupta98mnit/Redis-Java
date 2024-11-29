@@ -1,10 +1,8 @@
+package redis;
+
 import command.CommandRegistry;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import parser.RespParser;
 
 import java.io.BufferedReader;
@@ -33,6 +31,7 @@ public class RedisClientHandler implements Runnable {
 //            Loop to handle multiple commands from one client.
 //            This loop will continue to run even when there is no input stream,
 //            so handling thread sleep condition in loop.
+            RedisContext context = new RedisContext();
             while(!clientSocket.isClosed()) {
                 //If input stream empty, send thread to sleep
                 if(!reader.ready()) {
@@ -41,11 +40,12 @@ public class RedisClientHandler implements Runnable {
                 String[] args;
                 try {
                     args = RespParser.parse(reader);
+                    context.setArgs(args);
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
                     break;
                 }
-                String commandResponse = commandRegistry.getCommand(args[0]).execute(args);
+                String commandResponse = commandRegistry.getCommand(args[0]).execute(context);
                 out.write(commandResponse.getBytes());
                 out.flush();
             }
