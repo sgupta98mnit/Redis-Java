@@ -1,8 +1,8 @@
 package command;
 
-import redis.RedisContext;
+import redis.RedisClientContext;
 
 @FunctionalInterface
 public interface Command {
-    String execute(RedisContext context);
+    String execute(RedisClientContext context);
 }

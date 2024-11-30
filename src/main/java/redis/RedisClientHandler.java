@@ -31,7 +31,7 @@ public class RedisClientHandler implements Runnable {
 //            Loop to handle multiple commands from one client.
 //            This loop will continue to run even when there is no input stream,
 //            so handling thread sleep condition in loop.
-            RedisContext context = new RedisContext();
+            RedisClientContext context = new RedisClientContext();
             while(!clientSocket.isClosed()) {
                 //If input stream empty, send thread to sleep
                 if(!reader.ready()) {
@@ -39,13 +39,12 @@ public class RedisClientHandler implements Runnable {
                 }
                 String[] args;
                 try {
-                    args = RespParser.parse(reader);
-                    context.setArgs(args);
+                    RespParser.parse(reader, context);
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
                     break;
                 }
-                String commandResponse = commandRegistry.getCommand(args[0]).execute(context);
+                String commandResponse = commandRegistry.getCommand(context.getCommand()).execute(context);
                 out.write(commandResponse.getBytes());
                 out.flush();
             }
