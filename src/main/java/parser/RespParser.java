@@ -32,9 +32,9 @@ public class RespParser {
                 } else {
                     if(StringUtils.equalsIgnoreCase(value, "px")) {
                         // Expiry length. Can skip. Not needed
+                        reader.readLine();
                         long expiry = Long.parseLong(reader.readLine());
                         System.out.println("RespParser expiry: " + expiry);
-                        reader.readLine();
                         context.setExpiry(expiry);
                     }
 
