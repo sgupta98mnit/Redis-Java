@@ -14,8 +14,10 @@ public class GetCommand implements Command {
         System.out.println("Get command executed: " + context.getKey() + " Map size: " + context.getCache().size());
 //        context.getCache().forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
         String RESPONSE_NOT_FOUND = "$-1\r\n";
+        RedisCacheContext emptyCacheContext = new RedisCacheContext();
+        emptyCacheContext.setValue(RESPONSE_NOT_FOUND);
         RedisCacheContext cacheContext = context.getCache().getOrDefault(StringUtils.trim(context.getKey()),
-                RedisCacheContext.builder().value(RESPONSE_NOT_FOUND).build());
+                        emptyCacheContext);
         if(cacheContext.getExpiry() < System.currentTimeMillis())
             return RESPONSE_NOT_FOUND;
         if(!StringUtils.equals(cacheContext.getValue(), RESPONSE_NOT_FOUND))
