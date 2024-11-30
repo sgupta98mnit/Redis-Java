@@ -32,6 +32,7 @@ public class RedisClientHandler implements Runnable {
 //            This loop will continue to run even when there is no input stream,
 //            so handling thread sleep condition in loop.
             RedisClientContext context = new RedisClientContext();
+            context.setCurrentRequestTime(System.currentTimeMillis());
             while(!clientSocket.isClosed()) {
                 //If input stream empty, send thread to sleep
                 if(!reader.ready()) {

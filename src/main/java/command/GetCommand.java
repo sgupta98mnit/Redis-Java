@@ -19,7 +19,7 @@ public class GetCommand implements Command {
         RedisCacheContext cacheContext = context.getCache().getOrDefault(StringUtils.trim(context.getKey()),
                         emptyCacheContext);
         System.out.println("Cache Context: " + cacheContext);
-        if(cacheContext.getExpiry() < System.currentTimeMillis()) {
+        if(cacheContext.getExpiry() < context.getCurrentRequestTime()) {
             System.out.println("Cache Expired: " + cacheContext.getExpiry() + " Current time: " + System.currentTimeMillis());
             return RESPONSE_NOT_FOUND;
         }

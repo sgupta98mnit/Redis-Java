@@ -11,6 +11,7 @@ public class RedisClientContext {
     private String key;
     private String value;
     private long expiry;
+    private long currentRequestTime;
 
     public Map<String, RedisCacheContext> getCache() {
         return cache;
@@ -52,6 +53,14 @@ public class RedisClientContext {
         this.expiry = expiry;
     }
 
+    public long getCurrentRequestTime() {
+        return currentRequestTime;
+    }
+
+    public void setCurrentRequestTime(long currentRequestTime) {
+        this.currentRequestTime = currentRequestTime;
+    }
+
     @Override
     public String toString() {
         return "RedisClientContext{" +
@@ -60,6 +69,7 @@ public class RedisClientContext {
                 ", key='" + key + '\'' +
                 ", value='" + value + '\'' +
                 ", expiry=" + expiry +
+                ", currentRequestTime=" + currentRequestTime +
                 '}';
     }
 }
