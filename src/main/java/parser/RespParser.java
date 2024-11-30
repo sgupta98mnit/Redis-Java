@@ -29,13 +29,14 @@ public class RespParser {
                     context.setKey(value);
                 } else if (i == 2) {
                     context.setValue(value);
-                } else {
+                } else if(i == 3){
                     if(StringUtils.equalsIgnoreCase(value, "px")) {
                         // Expiry length. Can skip. Not needed
                         reader.readLine();
                         long expiry = Long.parseLong(reader.readLine());
                         System.out.println("RespParser expiry: " + expiry);
                         context.setExpiry(expiry);
+                        break;
                     }
 
                 }
