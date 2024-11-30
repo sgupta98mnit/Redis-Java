@@ -22,4 +22,12 @@ public class RedisCacheContext {
     public void setExpiry(long expiry) {
         this.expiry = expiry;
     }
+
+    @Override
+    public String toString() {
+        return "RedisCacheContext{" +
+                "value='" + value + '\'' +
+                ", expiry=" + expiry +
+                '}';
+    }
 }
