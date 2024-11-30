@@ -12,8 +12,8 @@ public class SetCommand implements Command {
         redisCacheContext.setValue(StringUtils.trim(context.getValue()));
         redisCacheContext.setExpiry(System.currentTimeMillis() + context.getExpiry());
         context.getCache().put(StringUtils.trim(context.getKey()), redisCacheContext);
-        System.out.println("Set command executed: " + context.getKey() + " "
-                + context.getValue() + " Map size: " + context.getCache().size());
+        System.out.println("clientContext: " + context);
+        System.out.println("cacheContext: " + redisCacheContext);
         return "+OK\r\n";
     }
 }

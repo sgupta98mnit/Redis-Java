@@ -51,4 +51,15 @@ public class RedisClientContext {
     public void setExpiry(long expiry) {
         this.expiry = expiry;
     }
+
+    @Override
+    public String toString() {
+        return "RedisClientContext{" +
+                "cache=" + cache +
+                ", command='" + command + '\'' +
+                ", key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                ", expiry=" + expiry +
+                '}';
+    }
 }
