@@ -30,8 +30,12 @@ public class RespParser {
                 } else if (i == 2) {
                     context.setValue(value);
                 } else {
-                    if(StringUtils.equalsIgnoreCase(value, "px"))
+                    if(StringUtils.equalsIgnoreCase(value, "px")) {
+                        // Expiry length. Can skip. Not needed
+                        reader.readLine();
                         context.setExpiry(Long.parseLong(reader.readLine()));
+                    }
+
                 }
             }
         } catch (IOException e) {
