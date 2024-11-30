@@ -37,7 +37,6 @@ public class RedisClientHandler implements Runnable {
                 if(!reader.ready()) {
                     Thread.sleep(THREAD_SLEEP_TIME);
                 }
-                String[] args;
                 try {
                     RespParser.parse(reader, context);
                 } catch (Exception e) {
@@ -45,6 +44,7 @@ public class RedisClientHandler implements Runnable {
                     break;
                 }
                 String commandResponse = commandRegistry.getCommand(context.getCommand()).execute(context);
+                System.out.println("Command: " + context.getCommand() + " Command response: " + commandResponse);
                 out.write(commandResponse.getBytes());
                 out.flush();
             }
