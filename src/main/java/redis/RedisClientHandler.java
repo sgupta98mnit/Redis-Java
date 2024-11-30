@@ -43,8 +43,9 @@ public class RedisClientHandler implements Runnable {
                     System.out.println("Exception: " + e.getMessage());
                     break;
                 }
+                System.out.println("Command: " + context.getCommand());
                 String commandResponse = commandRegistry.getCommand(context.getCommand()).execute(context);
-                System.out.println("Command: " + context.getCommand() + " Command response: " + commandResponse);
+                System.out.println("Command response: " + commandResponse);
                 out.write(commandResponse.getBytes());
                 out.flush();
             }
